@@ -1,32 +1,27 @@
 import { useRouter, type RelativePathString } from 'expo-router';
+import { useEffect } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import { Button, Card } from 'react-native-paper';
+import { useAuth } from '../../lib/AuthContext'; // ✅ Adjust the import path if needed
 
 export default function HomeScreen() {
   const router = useRouter();
+  const { session } = useAuth();
+
+  useEffect(() => {
+    if (session) {
+      router.replace('/dashboard' as RelativePathString); // ✅ or wherever your logged-in users go
+    }
+  }, [session]);
 
   const features = [
-    {
-      icon: '🍎',
-      title: 'Personalized Meal Plans',
-      description: 'Tailored nutrition guides',
-    },
-    {
-      icon: '🏋️',
-      title: 'Custom Workouts',
-      description: 'Exercise routines',
-    },
-    {
-      icon: '📝',
-      title: 'Habit Challenges',
-      description: 'Build healthy habits',
-    },
-    {
-      icon: '📊',
-      title: 'Progress Tracking',
-      description: 'Monitor your journey',
-    },
+    { icon: '🍎', title: 'Personalized Meal Plans', description: 'Tailored nutrition guides' },
+    { icon: '🏋️', title: 'Custom Workouts', description: 'Exercise routines' },
+    { icon: '📝', title: 'Habit Challenges', description: 'Build healthy habits' },
+    { icon: '📊', title: 'Progress Tracking', description: 'Monitor your journey' },
   ];
+
+  if (session) return null; // Prevent flashing the home screen before redirect
 
   return (
     <ScrollView className="flex-1 bg-white">
@@ -53,17 +48,10 @@ export default function HomeScreen() {
         </Text>
 
         <View className="flex-row gap-3 mb-8">
-          <Button
-            mode="elevated"
-            onPress={() => router.push('/(auth)/signup' as RelativePathString)}
-          >
+          <Button mode="elevated" onPress={() => router.push('/(auth)/signup' as RelativePathString)}>
             Get Started
           </Button>
-
-          <Button
-            mode="contained"
-            onPress={() => router.push('/(auth)/login' as RelativePathString)}
-          >
+          <Button mode="contained" onPress={() => router.push('/(auth)/login' as RelativePathString)}>
             Sign In
           </Button>
         </View>
@@ -77,11 +65,7 @@ export default function HomeScreen() {
 
         <View className="flex-row flex-wrap gap-4">
           {features.map((feature, index) => (
-            <Card
-              key={index}
-              className="w-[48%] bg-slate-50 p-4 rounded-xl border border-slate-200"
-              mode="elevated"
-            >
+            <Card key={index} className="w-[48%] bg-slate-50 p-4 rounded-xl border border-slate-200" mode="elevated">
               <Card.Content>
                 <Text className="text-2xl mb-3">{feature.icon}</Text>
                 <Text className="font-semibold text-slate-800 mb-1">
@@ -104,19 +88,13 @@ export default function HomeScreen() {
               Trusted by 10,000+ Users
             </Text>
           </View>
-
           <Text className="text-2xl font-bold text-center mb-2 text-slate-800">
             Ready to Transform Your Life?
           </Text>
           <Text className="text-base text-slate-500 mb-6 text-center px-6">
             Join thousands achieving their fitness goals.
           </Text>
-
-          <Button
-            mode="contained"
-            maxFontSizeMultiplier={2}
-            onPress={() => router.push('/(auth)/signup' as RelativePathString)}
-          >
+          <Button mode="contained" onPress={() => router.push('/(auth)/signup' as RelativePathString)}>
             Start Free Assessment
           </Button>
         </Card.Content>

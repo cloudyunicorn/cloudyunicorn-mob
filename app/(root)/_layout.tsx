@@ -3,7 +3,10 @@ import React from 'react'
 
 const RootLayout = () => {
   return (
-    <Stack />
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="index" />
+      <Stack.Screen name="dashboard/index" />
+    </Stack>
   )
 }
 
